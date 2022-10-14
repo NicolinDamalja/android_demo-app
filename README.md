@@ -1,66 +1,64 @@
-# PyTorch Android Examples
+# eye-contact-cnn
+This repository provides a deep convolutional neural network model trained to detect moments of eye contact in egocentric view. The model was trained on over 4 millions of facial images of > 100 young individuals during natural social interactions, and achives an accuracy comaprable to that of trained clinical human annotators.
 
-A list of Android demo apps built on the powerful [PyTorch Mobile](https://pytorch.org/mobile) platform.
+![](teaser.gif)
 
-### HelloWorld
-
-[HelloWorld](https://github.com/pytorch/android-demo-app/tree/master/HelloWorldApp) is a simple image classification application that demonstrates how to use the PyTorch Android API with the latest PyTorch 1.8, MobileNet v3, and [MemoryFormat.CHANNELS_LAST](https://pytorch.org/tutorials/intermediate/memory_format_tutorial.html).
-
-### PyTorch demo app
-
-The [PyTorch demo app](https://github.com/pytorch/android-demo-app/tree/master/PyTorchDemoApp) is a full-fledged app that contains two showcases. A camera app that runs a quantized model to classifiy images in real time. And a text-based app that uses a text classification model to predict the topic from the input text.
-
-### D2go
-
-[D2Go](https://github.com/pytorch/android-demo-app/tree/master/D2Go) demonstrates a Python script that creates the much lighter and much faster Facebook [D2Go](https://github.com/facebookresearch/d2go) model that is powered by PyTorch 1.8, torchvision 0.9, and Detectron2 with built-in SOTA networks for mobile, and an Android app that uses it to detect objects from pictures in your photos, taken with camera, or with live camera. This demo app also shows how to use the native pre-built torchvision-ops library.
-
-### Image Segmentation
-
-[Image Segmentation](https://github.com/pytorch/android-demo-app/tree/master/ImageSegmentation) demonstrates a Python script that converts the PyTorch [DeepLabV3](https://pytorch.org/hub/pytorch_vision_deeplabv3_resnet101/) model and an Android app that uses the model to segment images.
-
-### Object Detection
-
-[Object Detection](https://github.com/pytorch/android-demo-app/tree/master/ObjectDetection) demonstrates how to convert the popular [YOLOv5](https://pytorch.org/hub/ultralytics_yolov5/) model and use it in an Android app that detects objects from pictures in your photos, taken with camera, or with live camera.
-
-### Neural Machine Translation
-
-[Neural Machine Translation](https://github.com/pytorch/android-demo-app/tree/master/Seq2SeqNMT) demonstrates how to convert a sequence-to-sequence neural machine translation model trained with the code in the [PyTorch NMT tutorial](https://pytorch.org/tutorials/intermediate/seq2seq_translation_tutorial.html) and use the model in an Android app to do French-English translation.
-
-### Question Answering
-
-[Question Answering](https://github.com/pytorch/android-demo-app/tree/master/QuestionAnswering) demonstrates how to convert a powerful transformer QA model and use the model in an Android app to answer questions about PyTorch Mobile and more.
-
-### Speech recognition
-
-[Speech Recognition](https://github.com/pytorch/android-demo-app/tree/master/SpeechRecognition) demonstrates how to convert Facebook AI's wav2vec 2.0, one of the leading models in speech recognition, to TorchScript and how to use the scripted model in an Android app to perform speech recognition.
-
-### Vision Transformer
-
-[Vision Transformer](https://github.com/pytorch/android-demo-app/tree/master/ViT4MNIST) demonstrates how to use Facebook's latest Vision Transformer [DeiT](https://github.com/facebookresearch/deit) model to do image classification, and how convert another Vision Transformer model and use it in an Android app to perform handwritten digit recognition.
-
-### Speech recognition
-
-[Speech Recognition](https://github.com/pytorch/android-demo-app/tree/master/SpeechRecognition) demonstrates how to convert Facebook AI's wav2vec 2.0, one of the leading models in speech recognition, to TorchScript and how to use the scripted model in an Android app to perform speech recognition.
-
-### Streaming Speech recognition
-
-[Streaming Speech Recognition](https://github.com/pytorch/android-demo-app/tree/master/StreamingASR) demonstrates how to how to use a new torchaudio pipeline to perform streaming speech recognition, powered by Java Native Call to a C++ audio processing library for the mel spectrogram transform.
-
-### Video Classification
-
-[TorchVideo](https://github.com/pytorch/android-demo-app/tree/master/TorchVideo) demonstrates how to use a pre-trained video classification model, available at the newly released [PyTorchVideo](https://github.com/facebookresearch/pytorchvideo), on Android to see video classification results, updated per second while the video plays, on tested videos, videos from the Photos library, or even real-time videos.
+## Libraries used in our experiment
+- PyTorch 0.4.0
+- opencv 4.0.0
+- numpy 1.16.2
+- PIL 5.3.0
+- pandas 0.23.4
+- dlib 19.13.0 (optional if you want live face detection)
 
 
-## LICENSE
+## To run
+### with a webcam
+```
+python demo.py
+```
+### on a video file
+```
+python demo.py --video yourvideofile.avi
+```
+### on our sample video
+Try this if you don't want to use dlib's face and instead test with pre-detected faces.
 
-THIS SOFTWARE IS PROVIDED BY THE COPYRIGHT HOLDERS AND CONTRIBUTORS "AS IS"
-AND ANY EXPRESS OR IMPLIED WARRANTIES, INCLUDING, BUT NOT LIMITED TO, THE
-IMPLIED WARRANTIES OF MERCHANTABILITY AND FITNESS FOR A PARTICULAR PURPOSE
-ARE DISCLAIMED. IN NO EVENT SHALL THE COPYRIGHT OWNER OR CONTRIBUTORS BE
-LIABLE FOR ANY DIRECT, INDIRECT, INCIDENTAL, SPECIAL, EXEMPLARY, OR
-CONSEQUENTIAL DAMAGES (INCLUDING, BUT NOT LIMITED TO, PROCUREMENT OF
-SUBSTITUTE GOODS OR SERVICES; LOSS OF USE, DATA, OR PROFITS; OR BUSINESS
-INTERRUPTION) HOWEVER CAUSED AND ON ANY THEORY OF LIABILITY, WHETHER IN
-CONTRACT, STRICT LIABILITY, OR TORT (INCLUDING NEGLIGENCE OR OTHERWISE)
-ARISING IN ANY WAY OUT OF THE USE OF THIS SOFTWARE, EVEN IF ADVISED OF THE
-POSSIBILITY OF SUCH DAMAGE.
+Comment out the first line of demo.py "import dlib" if you didn't install dlib.
+
+```
+python demo.py --video demo_video.avi --face demo_face_detections.txt
+```
+
+Demo video has been downloaded from [here](https://youtu.be/5wFyxihwQiI). I used this [face detector](https://github.com/natanielruiz/dockerface) to generate the face detection file.
+
+
+## Flags
+- `--face`: Path to pre-processed face detection file of format [frame#, min_x, min_y, max_x, max_y]. If not specified, dlib's face detector will be used.
+- `-save_vis`: Saves the output as an avi video file.
+- `-save_text`: Saves the output as a text file (Format: [frame#, eye_contact_score]).
+- `-display_off`: Turn off display window.
+- Hit 'q' to quit the program.
+
+
+## Notes
+- Output eye contact score ranges [0, 1] and score above 0.9 is considered confident.
+- To further improve the result, smoothing the output is encouraged as it can help removing outliers caused by eye blinks, motion blur etc.
+
+
+## Citation
+Please cite this paper in any publications that make use of this software.
+
+```
+@article{chong2020,
+ title={Detection of eye contact with deep neural networks is as accurate as human experts},
+ url={osf.io/5a6m7},
+ DOI={10.31219/osf.io/5a6m7},
+ publisher={OSF Preprints},
+ author={Chong, Eunji and Clark-Whitney, Elysha and Southerland, Audrey and Stubbs, Elizabeth and Miller, Chanel and Ajodan, Eliana L and Silverman, Melanie R and Lord, Catherine and Rozga, Agata and Jones, Rebecca M and et al.},
+ year={2020}
+}
+```
+
+Link to the paper:
+[here](https://nature-research-under-consideration.nature.com/users/37265-nature-communications/posts/60730-detection-of-eye-contact-with-deep-neural-networks-is-as-accurate-as-human-experts)
