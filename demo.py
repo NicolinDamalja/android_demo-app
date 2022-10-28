@@ -113,7 +113,6 @@ def run(video_path, face_path, model_weight, jitter, vis, display_off, save_text
         if ret:
             height, width, channels = frame.shape
             frame = cv2.cvtColor(frame, cv2.COLOR_BGR2RGB)
-
             frame_cnt += 1
             bbox = []
             if facemode == 'DLIB':
