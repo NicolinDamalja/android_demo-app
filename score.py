@@ -6,14 +6,7 @@ import model
 
 
 def score(image, model_ptl):
-    model_ = model.model_static(model_ptl)
-    model_dict = model_.state_dict()
-    snapshot = torch.load(model_ptl)
-    model_dict.update(snapshot)
-    model_.load_state_dict(model_dict)
-
-    model_.train(False)
-    #model.eval()
+    model_ = torch.load(model_ptl)
     output_ = {}
 
     input_image = Image.open(image).convert('RGB')
@@ -30,7 +23,6 @@ def score(image, model_ptl):
     with torch.no_grad():
         score = torch.sigmoid(output).item()
         output_.update({os.path.basename(image): score})
-        #output.update({os.path.basename(image): model_(input_batch)})
 
     return output_
 
@@ -38,4 +30,4 @@ def score(image, model_ptl):
 if __name__ == "__main__":
     images = ['images/No_1.png', 'images/No_2.png', 'images/Yes_1.png', 'images/Yes_2.png']
     for image in images:
-        print(score(image, 'data/model_weights.pkl'), "\n")
+        print(score(image, 'data/model.pt'), "\n")
